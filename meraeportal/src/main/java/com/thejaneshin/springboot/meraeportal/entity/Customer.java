@@ -35,6 +35,18 @@ public class Customer {
 	@Column(name="phone")
 	private String phone;
 	
+	@Column(name="street")
+	private String street;
+	
+	@Column(name="city")
+	private String city;
+	
+	@Column(name="state")
+	private String state;
+	
+	@Column(name="zip")
+	private String zip;
+	
 	@OneToMany(mappedBy="customer",
 			   fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE,
 			   CascadeType.DETACH, CascadeType.REFRESH})
@@ -44,12 +56,17 @@ public class Customer {
 		
 	}
 
-	public Customer(String firstName, String lastName, String company, String email, String phone) {
+	public Customer(String firstName, String lastName, String company, String email, String phone, String street,
+			String city, String state, String zip) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.company = company;
 		this.email = email;
 		this.phone = phone;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
 	}
 
 	public int getId() {
@@ -100,6 +117,38 @@ public class Customer {
 		this.phone = phone;
 	}
 
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
 	public Collection<Project> getProjects() {
 		return projects;
 	}
@@ -111,7 +160,8 @@ public class Customer {
 	@Override
 	public String toString() {
 		return "Customer [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", company=" + company
-				+ ", email=" + email + ", phone=" + phone + ", projects=" + projects + "]";
+				+ ", email=" + email + ", phone=" + phone + ", street=" + street + ", city=" + city + ", state=" + state
+				+ ", zip=" + zip + ", projects=" + projects + "]";
 	}
 	
 }
