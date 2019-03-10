@@ -16,6 +16,8 @@ CREATE TABLE `user` (
   `phone` varchar(10) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
+  `enabled` tinyint(1) NOT NULL,
+  
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -39,12 +41,12 @@ VALUES
 ('ROLE_EMPLOYEE'),('ROLE_ADMIN');
 
 --
--- Table structure for table `users_roles`
+-- Table structure for table `user_role`
 --
 
-DROP TABLE IF EXISTS `users_roles`;
+DROP TABLE IF EXISTS `user_role`;
 
-CREATE TABLE `users_roles` (
+CREATE TABLE `user_role` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   
