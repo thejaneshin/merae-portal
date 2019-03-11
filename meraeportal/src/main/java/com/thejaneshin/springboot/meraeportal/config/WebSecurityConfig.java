@@ -16,16 +16,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-    DataSource dataSource;
+	DataSource dataSource;
 	
 	@Value("${spring.queries.users-query}")
-    private String usersQuery;
+	private String usersQuery;
 
     @Value("${spring.queries.roles-query}")
     private String rolesQuery;
 	
 	@Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+	public BCryptPasswordEncoder passwordEncoder() {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }

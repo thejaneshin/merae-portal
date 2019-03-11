@@ -99,6 +99,7 @@ CREATE TABLE `project` (
   `paid` tinyint(1) NOT NULL,
   `user_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL,
   
   PRIMARY KEY (`id`),
   

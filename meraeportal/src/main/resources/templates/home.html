@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	
 <head>
     <!-- Required meta tags -->
@@ -13,13 +13,27 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
 
 	<title>Home</title>
 </head>
 
+<!-- Barebones dashboard page -->
 <body>
-	Test123
-
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav navbar-left">
+				<li><a th:href="@{/}">Home</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a th:href="@{projects/list}">Projects</a>
+				<li><a th:href="@{user/profile}">Profile</a>
+			</ul>
+ 		</div>
+	</nav>
+	
+	<p>To be filled...</p>
+	
 	<!-- Add a logout button -->
 	<form th:action="@{/logout}" method="POST">
 		<input type="submit" value="Logout" />

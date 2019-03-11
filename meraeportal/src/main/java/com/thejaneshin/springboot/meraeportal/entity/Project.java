@@ -36,6 +36,9 @@ public class Project {
 	@Column(name="paid")
 	private boolean paid;
 	
+	@Column(name="invoice")
+	private String invoice;
+	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="user_id")
 	private User user;
@@ -49,13 +52,14 @@ public class Project {
 	}
 
 	public Project(String name, String type, boolean print, String status, float price, boolean paid,
-			Customer customer) {
+			String invoice, Customer customer) {
 		this.name = name;
 		this.type = type;
 		this.print = print;
 		this.status = status;
 		this.price = price;
 		this.paid = paid;
+		this.invoice = invoice;
 		this.customer = customer;
 	}
 
@@ -115,6 +119,14 @@ public class Project {
 		this.paid = paid;
 	}
 
+	public String getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -134,7 +146,7 @@ public class Project {
 	@Override
 	public String toString() {
 		return "Project [id=" + id + ", name=" + name + ", type=" + type + ", print=" + print + ", status=" + status
-				+ ", price=" + price + ", paid=" + paid + ", user=" + user + ", customer=" + customer + "]";
+				+ ", price=" + price + ", paid=" + paid + ", invoice=" + invoice + ", user=" + user + ", customer="
+				+ customer + "]";
 	}
-	
 }
