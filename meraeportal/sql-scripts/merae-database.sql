@@ -22,6 +22,19 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping test data for table `user`
+--
+-- NOTE: The passwords are encrypted using BCrypt
+--
+-- Default passwords are the same as the usernames (i.e. password for username admin is also admin)
+--
+
+INSERT INTO `user` (username,password,email,phone,first_name,last_name,enabled)
+VALUES
+('admin','$2a$04$EtyjEjPeneLdsjdtDDvacO8eoiAammHx4BvAeFNKT3WVWLWfEJtrG','adam@merae.com','1234567890','Adam','Min',1),
+('designer','$2a$04$Biv.pNdXLbi/9dSfEi2eI.hKx2abCrboqnIucTijLmDVr.jwgi41G','des@merae.com','9876543210','Des','Sign',1);
+
+--
 -- Table structure for table `role`
 --
 
@@ -38,7 +51,7 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (name)
 VALUES 
-('ROLE_EMPLOYEE'),('ROLE_ADMIN');
+('ROLE_DESIGNER'),('ROLE_ADMIN');
 
 --
 -- Table structure for table `user_role`
@@ -64,24 +77,14 @@ CREATE TABLE `user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `customer`
+-- Dumping test data for table `user_role`
 --
 
-DROP TABLE IF EXISTS `customer`;
-
-CREATE TABLE `customer` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(45) NOT NULL,
-  `last_name` varchar(45) NOT NULL,  
-  `company` varchar(100) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `phone` varchar(10) NOT NULL,
-  `street` varchar(100) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` varchar(30) NOT NULL,
-  `zip` varchar(15) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `user_role` (user_id,role_id)
+VALUES 
+(1,1),
+(1,2),
+(2,1);
 
 --
 -- Table structure for table `project`
@@ -91,15 +94,16 @@ DROP TABLE IF EXISTS `project`;
 
 CREATE TABLE `project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `type` varchar(80) NOT NULL,
-  `print` tinyint(1) NOT NULL,
-  `status` varchar(80) NOT NULL,
-  `cost` decimal(13,2) NOT NULL,
+  `company` varchar(100) NOT NULL,
   `paid` tinyint(1) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
   `invoice` varchar(255) NOT NULL,
+  `assigned_date` DATE DEFAULT NULL,
+  `type` varchar(80) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `print` tinyint(1) NOT NULL,
+  `status` varchar(80) DEFAULT NULL,
+  `due_date` DATE NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   
   PRIMARY KEY (`id`),
   
@@ -107,10 +111,14 @@ CREATE TABLE `project` (
   CONSTRAINT `FK_USER`
   FOREIGN KEY (`user_id`)
   REFERENCES `user` (`id`)
-  ON DELETE NO ACTION ON UPDATE NO ACTION,
-  
-  CONSTRAINT `FK_CUSTOMER`
-  FOREIGN KEY (`customer_id`)
-  REFERENCES `customer` (`id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping test data for table `project`
+--
+
+INSERT INTO `project` (company,paid,invoice,type,description,print,due_date)
+VALUES
+('Banana Inc',0,'https://www.google.com/','Logo Design','Simple,clean,two-toned',0,'2019-05-01'),
+('Ultra Technologies',1,'https://www.yahoo.com/','Business Card','For Kathy Smith, recruiter',1,'2019-06-05');
