@@ -35,8 +35,12 @@
  		</div>
 	</nav>
 	
+	<div class="container">
+		<p align="right" th:text="${'Welcome back, ' + me.firstName + '!'}" />
+	</div>
+	
 	<div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
-		<h3>Unassigned Projects</h3>
+		<h4>Unassigned Projects</h4>
 		<hr>
 		<table class="table table-bordered table-striped">
 			<thead class="thead-dark">
@@ -45,24 +49,65 @@
 					<th>Paid?</th>
 					<th>Invoice</th>
 					<th>Project</th>
+					<th>Description</th>
+					<th>Print?</th>
 					<th>Final Due Date</th>
-					<th>Assign To</th>
+					<th>Action</th>
 				</tr>
 			</thead>
-			
 			<tbody>
-				<tr>
-					<td>Merae</td>
-					<td>Yes</td>
-					<td>Link</td>
-					<td>Flyer</td>
-					<td>3/11/19</td>
-					<td></td>
+				<tr th:each="u : ${unassigned}">
+					<td th:text="${u.company}" />
+					<td th:if=${u.paid}>Yes</td>
+					<td th:if=${!u.paid}>No</td>
+					<td><a th:href="${u.invoice}">Link</a></td>
+					<td th:text="${u.type}" />
+					<td th:text="${u.description}" />
+					<td th:if=${u.print}>Yes</td>
+					<td th:if=${!u.print}>No</td>
+					<td th:text="${u.dueDate}" />
+					<td>-</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
+	<br>
+	<div class="container">
+		<h4>My Assigned Projects</h4>
+		<hr>
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Company</th>
+					<th>Paid?</th>
+					<th>Invoice</th>
+					<th>Date Assigned</th>
+					<th>Project</th>
+					<th>Description</th>
+					<th>Print?</th>
+					<th>Status</th>
+					<th>Final Due Date</th>
+					<th>Submit Final</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="mine : ${myProjects}">
+					<td th:text="${mine.company}" />
+					<td th:if=${mine.paid}>Yes</td>
+					<td th:if=${!mine.paid}>No</td>
+					<td><a th:href="${mine.invoice}">Link</a></td>
+					<td th:text="${mine.assignedDate}" />
+					<td th:text="${mine.type}" />
+					<td th:text="${mine.description}" />
+					<td th:if=${mine.print}>Yes</td>
+					<td th:if=${!mine.print}>No</td>
+					<td th:text="${mine.status}" />
+					<td th:text="${mine.dueDate}" />
+					<td>-</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	
 </body>
 
