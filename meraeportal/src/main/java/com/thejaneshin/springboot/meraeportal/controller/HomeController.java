@@ -43,7 +43,7 @@ public class HomeController {
 	}
 	
 	@GetMapping("/")
-	public String listProjects(Model theModel) {
+	public String listMyProjects(Model theModel) {
 		User me = userService.getCurrentUser();
 		theModel.addAttribute("me", me);
 		
@@ -53,19 +53,47 @@ public class HomeController {
 		List<Project> myCompletedProjects = projectService.findAllCompletedByUserId(me.getId());
 		theModel.addAttribute("myCompletedProjects", myCompletedProjects);
 		
-		return "home";
+		return "home/index";
+	}
+	
+	@GetMapping("/updateStatus")
+	public String updateStatus(@RequestParam("projectId") int theId, Model theModel) {
+		// Makes sure a user doesn't try to update status of another person's project
+		User me = userService.getCurrentUser();
+		User projectUser = userService.findUserByProjectId(theId);
+		
+		// If no user associated or different user is trying to access
+		if (projectUser == null || me.getId() != projectUser.getId())
+			return "access-denied";
+		else {
+			Project theProject = projectService.findById(theId);
+			// If project is already completed
+			if (theProject.getStatus().equals("Completed"))
+				return "access-denied";
+			theModel.addAttribute("project", theProject);
+			theModel.addAttribute("statuses", statuses);
+			return "home/update-status";
+		}
+	}
+	
+	@PostMapping("/updateStatus")
+	public String updateStatus(@ModelAttribute("project") Project theProject, @RequestParam("projectId") int projectId) {
+		Project p = projectService.findById(projectId);
+		p.setStatus(theProject.getStatus());
+		projectService.save(p);
+		return "redirect:/";
 	}
 	
 	@GetMapping("/submit")
-	public String submitProject(@RequestParam("projectId") int theId) {
+	public String submitMyProject(@RequestParam("projectId") int theId) {
 		// Makes sure a user doesn't try to submit another person's project
 		User me = userService.getCurrentUser();
 		User projectUser = userService.findUserByProjectId(theId);
 		
-		// If no user is associated with the given project id
-		if (projectUser == null)
+		// If no user associated or different user is trying to access
+		if (projectUser == null || me.getId() != projectUser.getId())
 			return "access-denied";
-		else if (me.getId() == projectUser.getId()) {
+		else {
 			Project theProject = projectService.findById(theId);
 			// If project is already completed
 			if (theProject.getStatus().equals("Completed"))
@@ -75,39 +103,5 @@ public class HomeController {
 			projectService.save(theProject);
 			return "redirect:/";
 		}
-		// If user is trying to submit someone else's project
-		else
-			return "access-denied";
-	}
-	
-	@GetMapping("/updateStatus")
-	public String updateStatus(@RequestParam("projectId") int theId, Model theModel) {
-		// Makes sure a user doesn't try to update status of another person's project
-		User me = userService.getCurrentUser();
-		User projectUser = userService.findUserByProjectId(theId);
-		
-		// If no user is associated with the given project id
-		if (projectUser == null)
-			return "access-denied";
-		else if (me.getId() == projectUser.getId()) {
-			Project theProject = projectService.findById(theId);
-			// If project is already completed
-			if (theProject.getStatus().equals("Completed"))
-				return "access-denied";
-			theModel.addAttribute("project", theProject);
-			theModel.addAttribute("statuses", statuses);
-			return "update-status";
-		}
-		// If user is trying to update someone else's project
-		else
-			return "access-denied";
-	}
-	
-	@PostMapping("/updateStatus")
-	public String saveProject(@ModelAttribute("project") Project theProject, @RequestParam("projectId") int projectId) {
-		Project p = projectService.findById(projectId);
-		p.setStatus(theProject.getStatus());
-		projectService.save(p);
-		return "redirect:/";
 	}
 }

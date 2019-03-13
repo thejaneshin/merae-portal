@@ -14,4 +14,6 @@ public interface ProjectService {
 	public Project findById(int theId);
 	
 	public void save(Project theProject);
+	
+	public void deleteById(int theId);
 }

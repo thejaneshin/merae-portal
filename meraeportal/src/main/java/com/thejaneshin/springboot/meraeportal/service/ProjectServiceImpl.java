@@ -41,13 +41,18 @@ public class ProjectServiceImpl implements ProjectService {
 		if (result.isPresent())
 			theProject = result.get();
 		else
-			throw new RuntimeException("Did not find project id - " + theId);
+			theProject = null;
 		return theProject;
 	}
 
 	@Override
 	public void save(Project theProject) {
 		projectRepository.save(theProject);
+	}
+
+	@Override
+	public void deleteById(int theId) {
+		projectRepository.deleteById(theId);
 	}
 
 }

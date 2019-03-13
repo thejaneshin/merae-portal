@@ -9,7 +9,7 @@ public class ProfileController {
 	@GetMapping("/profile")
 	public String showProfile(Model model) {
 		// Add later
-		return "profile";
+		return "profile/index";
 	}
 	
 }
