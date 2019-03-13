@@ -13,9 +13,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	
 
-	<title>Profile</title>
+	<title>Update Project Status</title>
 </head>
 
 <body>
@@ -45,7 +44,27 @@
 			</ul>
  		</div>
 	</nav>
-	This is the user profile!
+	<div class="container">
+		<h3>Update Project Status</h3>
+		<form action="#" th:action="@{/updateStatus}"
+						 th:object="${project}" method="POST">
+					 
+			<div style="margin-bottom: 25px" class="input-group">							
+				<select class="form-control" th:field="*{status}">
+					<option th:each="st : ${statuses}" th:value="${st}" th:text="${st}"></option>
+				</select>
+			</div>
+			
+			<input type="hidden" name="projectId" th:value="${project.id}" />
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
+			<button type="submit" class="btn btn-info col-2">Update</button>	 
+		</form>
+		
+		<hr>
+		<a th:href="@{/}">Back to Home Page</a>
+	</div>
 </body>
 
 </html>

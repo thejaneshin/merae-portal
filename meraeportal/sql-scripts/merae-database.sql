@@ -101,8 +101,9 @@ CREATE TABLE `project` (
   `type` varchar(80) NOT NULL,
   `description` varchar(255) NOT NULL,
   `print` tinyint(1) NOT NULL,
-  `status` varchar(80) DEFAULT NULL,
+  `status` varchar(80) NOT NULL,
   `due_date` DATE NOT NULL,
+  `submitted_date` DATE DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   
   PRIMARY KEY (`id`),

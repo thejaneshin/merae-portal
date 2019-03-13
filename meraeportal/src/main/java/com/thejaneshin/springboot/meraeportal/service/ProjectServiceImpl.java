@@ -1,6 +1,7 @@
 package com.thejaneshin.springboot.meraeportal.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,14 +24,30 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<Project> findAllByUserId(int userId) {
-		return projectRepository.findByUserId(userId);
+	public List<Project> findAllUncompletedByUserId(int userId) {
+		return projectRepository.findByUserIncomplete(userId);
 	}
 
 	@Override
-	public List<Project> findAllCompleted() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Project> findAllCompletedByUserId(int userId) {
+		return projectRepository.findByUserCompleted(userId);
+	}
+
+	@Override
+	public Project findById(int theId) {
+		Optional<Project> result = projectRepository.findById(theId);
+		Project theProject = null;
+		
+		if (result.isPresent())
+			theProject = result.get();
+		else
+			throw new RuntimeException("Did not find project id - " + theId);
+		return theProject;
+	}
+
+	@Override
+	public void save(Project theProject) {
+		projectRepository.save(theProject);
 	}
 
 }

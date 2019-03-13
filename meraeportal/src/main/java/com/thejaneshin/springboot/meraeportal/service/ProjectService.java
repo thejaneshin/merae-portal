@@ -7,7 +7,11 @@ import com.thejaneshin.springboot.meraeportal.entity.Project;
 public interface ProjectService {
 	public List<Project> findAllUnassigned();
 	
-	public List<Project> findAllByUserId(int userId);
+	public List<Project> findAllUncompletedByUserId(int userId);
 	
-	public List<Project> findAllCompleted();
+	public List<Project> findAllCompletedByUserId(int userId);
+	
+	public Project findById(int theId);
+	
+	public void save(Project theProject);
 }

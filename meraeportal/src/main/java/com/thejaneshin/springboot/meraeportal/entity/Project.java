@@ -47,6 +47,9 @@ public class Project {
 	@Column(name="due_date")
 	private LocalDate dueDate;
 	
+	@Column(name="submitted_date")
+	private LocalDate submittedDate;
+	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="user_id")
 	private User user;
@@ -64,6 +67,7 @@ public class Project {
 		this.description = description;
 		this.print = print;
 		this.dueDate = dueDate;
+		this.status = "N/A";
 	}
 
 	public Project(String company, boolean paid, String invoice, LocalDate assignedDate, String type,
@@ -160,6 +164,14 @@ public class Project {
 		this.dueDate = dueDate;
 	}
 
+	public LocalDate getSubmittedDate() {
+		return submittedDate;
+	}
+
+	public void setSubmittedDate(LocalDate submittedDate) {
+		this.submittedDate = submittedDate;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -172,7 +184,8 @@ public class Project {
 	public String toString() {
 		return "Project [id=" + id + ", company=" + company + ", paid=" + paid + ", invoice=" + invoice
 				+ ", assignedDate=" + assignedDate + ", type=" + type + ", description=" + description + ", print="
-				+ print + ", status=" + status + ", dueDate=" + dueDate + ", user=" + user + "]";
+				+ print + ", status=" + status + ", dueDate=" + dueDate + ", submittedDate=" + submittedDate + ", user="
+				+ user + "]";
 	}
-	
+
 }

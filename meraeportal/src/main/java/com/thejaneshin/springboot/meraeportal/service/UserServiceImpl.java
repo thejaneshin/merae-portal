@@ -27,4 +27,9 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User findUserByProjectId(int projectId) {
+		return userRepository.findByProjectId(projectId);
+	}
+
 }

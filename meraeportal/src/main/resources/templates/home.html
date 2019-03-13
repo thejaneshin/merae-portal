@@ -13,6 +13,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<!-- reference CSS file -->
+	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
 
 	<title>Home</title>
 </head>
@@ -22,6 +25,16 @@
 		<div class="container-fluid">
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/}">Home</a></li>
+				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						Employees
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/employees/projects}">Projects</a></li>
+						<li><a th:href="@{/employees/info}">Information</a></li>
+					</ul>
+				</li>
 				<li><a th:href="@{/profile}">Profile</a></li>
 				
 				<!-- Used JavaScript to have the link perform a POST on a hidden form -->
@@ -38,44 +51,11 @@
 	<div class="container">
 		<p align="right" th:text="${'Welcome back, ' + me.firstName + '!'}" />
 	</div>
-	
-	<div class="container" sec:authorize="hasAuthority('ROLE_ADMIN')">
-		<h4>Unassigned Projects</h4>
-		<hr>
-		<table class="table table-bordered table-striped">
-			<thead class="thead-dark">
-				<tr>
-					<th>Company</th>
-					<th>Paid?</th>
-					<th>Invoice</th>
-					<th>Project</th>
-					<th>Description</th>
-					<th>Print?</th>
-					<th>Final Due Date</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="u : ${unassigned}">
-					<td th:text="${u.company}" />
-					<td th:if=${u.paid}>Yes</td>
-					<td th:if=${!u.paid}>No</td>
-					<td><a th:href="${u.invoice}">Link</a></td>
-					<td th:text="${u.type}" />
-					<td th:text="${u.description}" />
-					<td th:if=${u.print}>Yes</td>
-					<td th:if=${!u.print}>No</td>
-					<td th:text="${u.dueDate}" />
-					<td>-</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
 	<br>
 	<div class="container">
-		<h4>My Assigned Projects</h4>
+		<h4><b>My Assigned Projects</b></h4>
 		<hr>
-		<table class="table table-bordered table-striped">
+		<table th:if="${myIncompleteProjects} and ${myIncompleteProjects.size()}" class="table table-bordered table-striped">
 			<thead class="thead-dark">
 				<tr>
 					<th>Company</th>
@@ -91,24 +71,57 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="mine : ${myProjects}">
-					<td th:text="${mine.company}" />
-					<td th:if=${mine.paid}>Yes</td>
-					<td th:if=${!mine.paid}>No</td>
-					<td><a th:href="${mine.invoice}">Link</a></td>
-					<td th:text="${mine.assignedDate}" />
-					<td th:text="${mine.type}" />
-					<td th:text="${mine.description}" />
-					<td th:if=${mine.print}>Yes</td>
-					<td th:if=${!mine.print}>No</td>
-					<td th:text="${mine.status}" />
-					<td th:text="${mine.dueDate}" />
-					<td>-</td>
+				<tr th:each="myIncomplete : ${myIncompleteProjects}">
+					<td th:text="${myIncomplete.company}" />
+					<td th:if=${myIncomplete.paid}>Yes</td>
+					<td th:if=${!myIncomplete.paid}>No</td>
+					<td><a th:href="${myIncomplete.invoice}" target="_blank">Link</a></td>
+					<td th:text="${myIncomplete.assignedDate}" />
+					<td th:text="${myIncomplete.type}" />
+					<td th:text="${myIncomplete.description}" />
+					<td th:if=${myIncomplete.print}>Yes</td>
+					<td th:if=${!myIncomplete.print}>No</td>
+					<td><a th:href="@{/updateStatus(projectId=${myIncomplete.id})}" th:text="${myIncomplete.status}"></a></td>
+					<td th:text="${myIncomplete.dueDate}" />
+					<td>
+						<a th:href="@{/submit(projectId=${myIncomplete.id})}"
+						   class="btn btn-success btn-sm"
+						   onclick="if (!(confirm('Are you sure you want to submit this project?'))) return false">
+							Submit
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
+		<p th:unless="${myIncompleteProjects} and ${myIncompleteProjects.size()}">No projects at the moment.</p>
 	</div>
-	
+	<br>
+	<div class="container">
+		<h4><b>My Completed Projects</b></h4>
+		<hr>
+		<table th:if="${myCompletedProjects} and ${myCompletedProjects.size()}" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Company</th>
+					<th>Paid?</th>
+					<th>Invoice</th>
+					<th>Project</th>
+					<th>Submitted On</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="myCompleted : ${myCompletedProjects}">
+					<td th:text="${myCompleted.company}" />
+					<td th:if=${myCompleted.paid}>Yes</td>
+					<td th:if=${!myCompleted.paid}>No</td>
+					<td><a th:href="${myCompleted.invoice}" target="_blank">Link</a></td>
+					<td th:text="${myCompleted.type}" />
+					<td th:text="${myCompleted.submittedDate}" />
+				</tr>
+			</tbody>
+		</table>
+		<p th:unless="${myCompletedProjects} and ${myCompletedProjects.size()}">No projects completed.</p>
+	</div>
 </body>
 
 </html>
