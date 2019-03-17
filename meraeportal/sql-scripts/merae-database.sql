@@ -104,6 +104,7 @@ CREATE TABLE `project` (
   `status` varchar(80) NOT NULL,
   `due_date` DATE NOT NULL,
   `submitted_date` DATE DEFAULT NULL,
+  `cancelled_date` DATE DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   
   PRIMARY KEY (`id`),

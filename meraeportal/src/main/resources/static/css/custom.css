@@ -5,3 +5,17 @@
 .dropdown:hover>.dropdown-toggle {
 	color: white;
 }
+
+.error {
+	color: red;
+}
+
+.nav-logo {
+	line-height: 50px;
+}
+
+.welcome {
+	font-size: 20px;
+	padding-right: 15px;
+	font-weight: bold;
+}

@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="project")
@@ -20,12 +24,16 @@ public class Project {
 	@Column(name="id")
 	private int id;
 	
+	@NotNull(message=" is required")
+	@Size(min = 1, message=" is required")
 	@Column(name="company")
 	private String company;
 	
 	@Column(name="paid")
 	private boolean paid;
 	
+	@NotNull(message=" is required")
+	@Size(min = 1, message=" is required")
 	@Column(name="invoice")
 	private String invoice;
 	
@@ -35,6 +43,8 @@ public class Project {
 	@Column(name="type")
 	private String type;
 	
+	@NotNull(message=" is required")
+	@Size(min = 1, message=" is required")
 	@Column(name="description")
 	private String description;
 	
@@ -44,18 +54,23 @@ public class Project {
 	@Column(name="status")
 	private String status;
 	
+	@NotNull(message=" is required")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@Column(name="due_date")
 	private LocalDate dueDate;
 	
 	@Column(name="submitted_date")
 	private LocalDate submittedDate;
 	
+	@Column(name="cancelled_date")
+	private LocalDate cancelledDate;
+	
 	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name="user_id")
 	private User user;
 	
 	public Project() {
-		
+		this.status = "N/A";
 	}
 
 	public Project(String company, boolean paid, String invoice, String type, String description, boolean print,
@@ -172,6 +187,14 @@ public class Project {
 		this.submittedDate = submittedDate;
 	}
 
+	public LocalDate getCancelledDate() {
+		return cancelledDate;
+	}
+
+	public void setCancelledDate(LocalDate cancelledDate) {
+		this.cancelledDate = cancelledDate;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -184,8 +207,8 @@ public class Project {
 	public String toString() {
 		return "Project [id=" + id + ", company=" + company + ", paid=" + paid + ", invoice=" + invoice
 				+ ", assignedDate=" + assignedDate + ", type=" + type + ", description=" + description + ", print="
-				+ print + ", status=" + status + ", dueDate=" + dueDate + ", submittedDate=" + submittedDate + ", user="
-				+ user + "]";
+				+ print + ", status=" + status + ", dueDate=" + dueDate + ", submittedDate=" + submittedDate + ", cancelledDate="
+				+ cancelledDate + "]";
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.thejaneshin.springboot.meraeportal.entity;
 
-import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,12 +45,12 @@ public class User {
 	@JoinTable(name="user_role", 
 	joinColumns=@JoinColumn(name="user_id"), 
 	inverseJoinColumns=@JoinColumn(name="role_id"))
-	private Collection<Role> roles;
+	private Set<Role> roles;
 	
 	@OneToMany(mappedBy="user",
 			   fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE,
 			   CascadeType.DETACH, CascadeType.REFRESH})
-	private Collection<Project> projects;
+	private Set<Project> projects;
 	
 	public User() {
 		
@@ -66,7 +66,7 @@ public class User {
 	}
 
 	public User(String username, String password, String email, String phone, String firstName, String lastName,
-			Collection<Role> roles) {
+			Set<Role> roles) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
@@ -132,27 +132,26 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public Collection<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Collection<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
-	public Collection<Project> getProjects() {
+	public Set<Project> getProjects() {
 		return projects;
 	}
 
-	public void setCustomers(Collection<Project> projects) {
+	public void setCustomers(Set<Project> projects) {
 		this.projects = projects;
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phone="
-				+ phone + ", firstName=" + firstName + ", lastName=" + lastName + ", roles=" + roles + ", project="
-				+ projects + "]";
+				+ phone + ", firstName=" + firstName + ", lastName=" + lastName + ", roles=" + roles + "]";
 	}
 	
 }

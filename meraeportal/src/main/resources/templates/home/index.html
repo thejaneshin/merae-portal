@@ -21,8 +21,9 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
+			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="125" height="30"/></a>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/}">Home</a></li>
 				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
@@ -48,9 +49,8 @@
  		</div>
 	</nav>
 	
-	<div class="container">
-		<p align="right" th:text="${'Welcome back, ' + me.firstName + '!'}" />
-	</div>
+	<p class="welcome" align="right" th:text="${'Welcome back, ' + me.firstName + '!'}" />
+	
 	<br>
 	<div class="container">
 		<h4><b>My Assigned Projects</b></h4>
@@ -67,7 +67,7 @@
 					<th>Print?</th>
 					<th>Status</th>
 					<th>Final Due Date</th>
-					<th>Submit Final</th>
+					<th>Completed?</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -76,18 +76,18 @@
 					<td th:if=${myIncomplete.paid}>Yes</td>
 					<td th:if=${!myIncomplete.paid}>No</td>
 					<td><a th:href="${myIncomplete.invoice}" target="_blank">Link</a></td>
-					<td th:text="${myIncomplete.assignedDate}" />
+					<td th:text="${#temporals.format(myIncomplete.assignedDate, 'MM/dd/yyyy')}" />
 					<td th:text="${myIncomplete.type}" />
 					<td th:text="${myIncomplete.description}" />
 					<td th:if=${myIncomplete.print}>Yes</td>
 					<td th:if=${!myIncomplete.print}>No</td>
 					<td><a th:href="@{/updateStatus(projectId=${myIncomplete.id})}" th:text="${myIncomplete.status}"></a></td>
-					<td th:text="${myIncomplete.dueDate}" />
+					<td th:text="${#temporals.format(myIncomplete.dueDate, 'MM/dd/yyyy')}" />
 					<td>
 						<a th:href="@{/submit(projectId=${myIncomplete.id})}"
 						   class="btn btn-success btn-sm"
 						   onclick="if (!(confirm('Are you sure you want to submit this project?'))) return false">
-							Submit
+							Complete
 						</a>
 					</td>
 				</tr>
@@ -107,6 +107,7 @@
 					<th>Invoice</th>
 					<th>Project</th>
 					<th>Submitted On</th>
+					<th>Undo Complete?</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -116,12 +117,49 @@
 					<td th:if=${!myCompleted.paid}>No</td>
 					<td><a th:href="${myCompleted.invoice}" target="_blank">Link</a></td>
 					<td th:text="${myCompleted.type}" />
-					<td th:text="${myCompleted.submittedDate}" />
+					<td th:text="${#temporals.format(myCompleted.submittedDate, 'MM/dd/yyyy')}" />
+					<td>
+						<a th:href="@{/undoComplete(projectId=${myCompleted.id})}"
+						   class="btn btn-primary btn-sm"
+						   onclick="if (!(confirm('Are you sure you want to undo complete?'))) return false">
+							Undo Complete
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
 		<p th:unless="${myCompletedProjects} and ${myCompletedProjects.size()}">No projects completed.</p>
 	</div>
+	
+	<br>
+	<div class="container">
+		<h4><b>My Cancelled Projects</b></h4>
+		<hr>
+		<table th:if="${myCancelledProjects} and ${myCancelledProjects.size()}" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Company</th>
+					<th>Paid?</th>
+					<th>Invoice</th>
+					<th>Project</th>
+					<th>Cancelled On</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="myCancelled : ${myCancelledProjects}">
+					<td th:text="${myCancelled.company}" />
+					<td th:if=${myCancelled.paid}>Yes</td>
+					<td th:if=${!myCancelled.paid}>No</td>
+					<td><a th:href="${myCancelled.invoice}" target="_blank">Link</a></td>
+					<td th:text="${myCancelled.type}" />
+					<td th:text="${#temporals.format(myCancelled.cancelledDate, 'MM/dd/yyyy')}" />
+				</tr>
+			</tbody>
+		</table>
+		<p th:unless="${myCancelledProjects} and ${myCancelledProjects.size()}">No projects cancelled.</p>
+	</div>
+	
+	
 </body>
 
 </html>

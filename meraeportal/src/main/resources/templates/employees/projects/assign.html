@@ -17,7 +17,7 @@
 	<!-- reference CSS file -->
 	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
 
-	<title>Profile</title>
+	<title>Assign Project</title>
 </head>
 
 <body>
@@ -48,7 +48,26 @@
 			</ul>
  		</div>
 	</nav>
-	This is the user profile!
+	<div class="container">
+		<h3>Assign Project</h3>
+		<hr>
+		<form action="#" th:action="@{/employees/projects/assign}"
+						 th:object="${project}" method="POST">
+					 
+			<div style="margin-bottom: 25px" class="input-group">							
+				<select class="form-control" th:field="*{user}">
+					<option th:each="des : ${designers}" th:value="${des.id}" th:text="${des.firstName} + ' ' + ${des.lastName}"></option>
+				</select>
+			</div>
+			
+			<input type="hidden" name="projectId" th:value="${project.id}" />
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
+			<button type="submit" class="btn btn-info col-2">Assign</button>	 
+		</form>
+		<hr>
+		<a th:href="@{/employees/projects}">Back to Employees Projects</a>
+	</div>
 </body>
-
 </html>

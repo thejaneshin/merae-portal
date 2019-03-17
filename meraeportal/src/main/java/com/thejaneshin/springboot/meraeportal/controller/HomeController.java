@@ -1,10 +1,7 @@
 package com.thejaneshin.springboot.meraeportal.controller;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,24 +19,10 @@ import com.thejaneshin.springboot.meraeportal.service.UserService;
 public class HomeController {
 	private ProjectService projectService;
 	private UserService userService;
-	private List<String> statuses;
 	
 	public HomeController(ProjectService theProjectService, UserService theUserService) {
 		projectService = theProjectService;
 		userService = theUserService;
-	}
-	
-	@PostConstruct
-	protected void loadStatuses() {
-		statuses = new LinkedList<>();
-		statuses.add("N/A");
-		statuses.add("First");
-		statuses.add("Second");
-		statuses.add("Third");
-		statuses.add("Fourth");
-		statuses.add("Fifth");
-		statuses.add("Cancelled");
-		statuses.add("Late");	
 	}
 	
 	@GetMapping("/")
@@ -47,11 +30,14 @@ public class HomeController {
 		User me = userService.getCurrentUser();
 		theModel.addAttribute("me", me);
 		
-		List<Project> myIncompleteProjects = projectService.findAllUncompletedByUserId(me.getId());
+		List<Project> myIncompleteProjects = projectService.findAllIncompleteByUserId(me.getId());
 		theModel.addAttribute("myIncompleteProjects", myIncompleteProjects);
 		
 		List<Project> myCompletedProjects = projectService.findAllCompletedByUserId(me.getId());
 		theModel.addAttribute("myCompletedProjects", myCompletedProjects);
+		
+		List<Project> myCancelledProjects = projectService.findAllCancelledByUserId(me.getId());
+		theModel.addAttribute("myCancelledProjects", myCancelledProjects);
 		
 		return "home/index";
 	}
@@ -68,10 +54,9 @@ public class HomeController {
 		else {
 			Project theProject = projectService.findById(theId);
 			// If project is already completed
-			if (theProject.getStatus().equals("Completed"))
+			if (theProject.getStatus().equals("Completed") && theProject.getSubmittedDate() != null)
 				return "access-denied";
 			theModel.addAttribute("project", theProject);
-			theModel.addAttribute("statuses", statuses);
 			return "home/update-status";
 		}
 	}
@@ -95,11 +80,31 @@ public class HomeController {
 			return "access-denied";
 		else {
 			Project theProject = projectService.findById(theId);
-			// If project is already completed
-			if (theProject.getStatus().equals("Completed"))
+			// If project is already completed or cancelled
+			if (theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() != null ||
+					theProject.getStatus().equals("Cancelled") || theProject.getCancelledDate() != null)
 				return "access-denied";
 			theProject.setStatus("Completed");
 			theProject.setSubmittedDate(LocalDate.now());
+			projectService.save(theProject);
+			return "redirect:/";
+		}
+	}
+	
+	@GetMapping("/undoComplete")
+	public String undoCompleteMyProject(@RequestParam("projectId") int theId) {
+		User me = userService.getCurrentUser();
+		User projectUser = userService.findUserByProjectId(theId);
+		
+		// If no user associated or different user is trying to access
+		if (projectUser == null || me.getId() != projectUser.getId())
+			return "access-denied";
+		else {
+			Project theProject = projectService.findById(theId);
+			if (!theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() == null)
+				return "access-denied";
+			theProject.setStatus("N/A");
+			theProject.setSubmittedDate(null);
 			projectService.save(theProject);
 			return "redirect:/";
 		}

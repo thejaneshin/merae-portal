@@ -21,8 +21,9 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
+			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="125" height="30"/></a>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/}">Home</a></li>
 				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
@@ -55,7 +56,13 @@
 					 
 			<div style="margin-bottom: 25px" class="input-group">							
 				<select class="form-control" th:field="*{status}">
-					<option th:each="st : ${statuses}" th:value="${st}" th:text="${st}"></option>
+					<option value="N/A">N/A</option>
+					<option value="First">First</option>
+					<option value="Second">Second</option>
+					<option value="Third">Third</option>
+					<option value="Fourth">Fourth</option>
+					<option value="Fifth">Fifth</option>
+					<option value="Late">Late</option>
 				</select>
 			</div>
 			
