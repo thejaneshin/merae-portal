@@ -21,8 +21,9 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
+			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="125" height="30"/></a>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/}">Home</a></li>
 				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
@@ -48,7 +49,110 @@
  		</div>
 	</nav>
 	<br><br>
-	
+	<div class="container">
+		<h3>Save Project</h3>
+		<hr>
+		<form action="#" th:action="@{/employees/projects/save}"
+						 th:object="${project}" method="POST">
+			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{user}" />
+			<input type="hidden" th:field="*{assignedDate}" />
+			
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Company</label>
+				<span th:errors="*{company}" class="error"></span>
+				<input type="text" th:field="*{company}" class="form-control" th:errorclass="wrong" placeholder="Company">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Paid?</label>						
+				<select class="form-control" th:field="*{paid}">
+					<option th:value=false th:text="No"></option>
+					<option th:value=true th:text="Yes"></option>
+				</select>
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Invoice</label>
+				<span th:errors="*{invoice}" class="error"></span>
+				<input type="text" th:field="*{invoice}" class="form-control" placeholder="Invoice link">
+			</div>
+			
+			<!-- Change this to dropdown with all the options -->
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Project Type</label>
+				<select class="form-control" th:field="*{type}">
+					<option value="Single Sided Business Card">Single Sided Business Card</option>
+					<option value="Double Sided Business Card">Double Sided Business Card</option>
+					<option value="Single Sided Flyer">Single Sided Flyer</option>
+					<option value="Single Sided Poster">Single Sided Poster</option>
+					<option value="Double Sided Flyer">Double Sided Flyer</option>
+					<option value="Double Sided Brochure">Double Sided Brochure</option>
+					<option value="Signage">Signage</option>
+					<option value="Paper Menu">Paper Menu</option>
+					<option value="Postcard">Postcard</option>
+					<option value="Web Banner">Web Banner</option>
+					<option value="No-Blemish Photo Editing">No-Blemish Photo Editing</option>
+					<option value="Logo">Logo</option>
+					<option value="Email Signature">Email Signature</option>
+					<option value="Email Marketing Design">Email Marketing Design</option>
+					<option value="SquareSpace or Weebly Web Design">SquareSpace or Weebly Web Design</option>
+				</select>
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Description</label>
+				<span th:errors="*{description}" class="error"></span>
+				<input type="text" th:field="*{description}" class="form-control" placeholder="Description">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Print?</label>						
+				<select class="form-control" th:field="*{print}">
+					<option th:value=false th:text="No"></option>
+					<option th:value=true th:text="Yes"></option>
+				</select>
+			</div>
+			
+			<!-- This is a check for already assigned projects -->
+			<div th:if="${project.user != null}" style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Status</label>
+				<select class="form-control" th:field="*{status}">
+					<option value="N/A">N/A</option>
+					<option value="First">First</option>
+					<option value="Second">Second</option>
+					<option value="Third">Third</option>
+					<option value="Fourth">Fourth</option>
+					<option value="Fifth">Fifth</option>
+					<option value="Cancelled">Cancelled</option>
+					<option value="Late">Late</option>
+				</select>
+			</div>
+			
+			<!-- This is a check for unassigned projects -->
+			<input th:if="${project.user == null}" type="hidden" th:field="*{status}" />
+			
+			<!-- Need to add in error field for this -->
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Due Date (YYYY-MM-DD)</label>
+				<span th:errors="*{dueDate}" class="error"></span>
+				<input type="text" th:field="*{dueDate}" class="form-control" placeholder="Due date">
+			</div>
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
+			<div class="form-group">
+				<button type="submit" class="btn btn-info">Save</button>
+			</div>
+			
+			
+		</form>
+		
+		<hr>
+		<a th:href="@{/employees/projects}">Back to Employees Projects</a>
+		<br><br>
+	</div>
 	
 </body>
 
