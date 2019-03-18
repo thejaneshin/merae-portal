@@ -44,7 +44,7 @@
 					<ul class="dropdown-menu">
 						<li><a th:href="@{/settings}">Profile</a></li>
 						<li><a th:href="@{/settings/edit}">Edit Contact Info</a></li>
-						<li><a th:href="@{/settings/resetPassword}">Reset Password</a></li>
+						<li><a th:href="@{/settings/changePassword}">Change Password</a></li>
 					</ul>
 				</li>
 				
@@ -62,6 +62,18 @@
 	<div class="container">
 		<h3>Edit Contact Info</h3>
 		<hr>
+		
+		<div class="form-group" th:if="${successChange}">
+			<div class="col-xs-15">
+				<div>
+					<div class="alert alert-success col-md-3">
+						Successfully updated!
+					</div>
+				</div>
+			</div>
+			<br><br><br>
+		</div>
+		
 		<form action="#" th:action="@{/settings/edit}"
 						 th:object="${me}" method="POST">
 						 
