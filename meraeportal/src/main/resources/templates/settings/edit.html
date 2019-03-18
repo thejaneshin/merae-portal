@@ -17,7 +17,7 @@
 	<!-- reference CSS file -->
 	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
 
-	<title>Update Project Status</title>
+	<title>Edit Contact Information</title>
 </head>
 
 <body>
@@ -60,33 +60,38 @@
 	</nav>
 	
 	<div class="container">
-		<h3>Update Project Status</h3>
+		<h3>Edit Contact Info</h3>
 		<hr>
-		<form action="#" th:action="@{/updateStatus}"
-						 th:object="${project}" method="POST">
-					 
-			<div style="margin-bottom: 25px" class="input-group">							
-				<select class="form-control" th:field="*{status}">
-					<option value="N/A">N/A</option>
-					<option value="First">First</option>
-					<option value="Second">Second</option>
-					<option value="Third">Third</option>
-					<option value="Fourth">Fourth</option>
-					<option value="Fifth">Fifth</option>
-					<option value="Late">Late</option>
-				</select>
+		<form action="#" th:action="@{/settings/edit}"
+						 th:object="${me}" method="POST">
+						 
+			<!-- Because of constraints on these fields -->
+			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{username}" />
+			<input type="hidden" th:field="*{password}" />
+			<input type="hidden" th:field="*{firstName}" />
+			<input type="hidden" th:field="*{lastName}" />
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Email</label>
+				<span th:errors="*{email}" class="error"></span>
+				<input type="text" th:field="*{email}" class="form-control" placeholder="Email">
 			</div>
 			
-			<input type="hidden" name="projectId" th:value="${project.id}" />
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Phone (xxx-xxx-xxxx)</label>
+				<span th:errors="*{phone}" class="error"></span>
+				<input type="text" th:field="*{phone}" class="form-control" placeholder="Phone">
+			</div>
 			
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 			
-			<button type="submit" class="btn btn-info col-2">Update</button>	 
+			<div class="form-group">
+				<button type="submit" class="btn btn-info">Update</button>
+			</div>			 
 		</form>
-		
-		<hr>
-		<a th:href="@{/}">Back to Home Page</a>
 	</div>
+	
 </body>
 
 </html>

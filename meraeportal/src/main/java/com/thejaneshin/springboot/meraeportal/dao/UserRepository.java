@@ -17,4 +17,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query("SELECT u FROM User u ORDER BY u.lastName ASC, u.firstName ASC")
 	public List<User> findAllByNameOrder();
 	
+	public User findById(int userId);
 }

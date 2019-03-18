@@ -51,4 +51,32 @@ public class UserServiceImpl implements UserService {
 		return designers;
 	}
 
+	@Override
+	public List<String> findAllRolesByUserId(int userId) {
+		User user = userRepository.findById(userId);
+		List<String> roles = new LinkedList<>();
+		for (Role r : user.getRoles())
+			roles.add(r.getName());
+		
+		// List of role names sorted by order of hierarchy
+		List<String> orderedRoles = new LinkedList<>();
+		
+		if (roles.contains("ROLE_ADMIN"))
+			orderedRoles.add("Admin");
+		if (roles.contains("ROLE_DESIGNER"))
+			orderedRoles.add("Designer");
+		
+		return orderedRoles;
+	}
+
+	@Override
+	public User findById(int userId) {
+		return userRepository.findById(userId);
+	}
+	
+	@Override
+	public void save(User user) {
+		userRepository.save(user);
+	}
+
 }

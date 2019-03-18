@@ -17,13 +17,13 @@
 	<!-- reference CSS file -->
 	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
 
-	<title>Profile</title>
+	<title>My Profile</title>
 </head>
 
 <body>
 	<nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
-			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="125" height="30"/></a>
+			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="120" height="30"/></a>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/}">Home</a></li>
 				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
@@ -36,7 +36,17 @@
 						<li><a th:href="@{/employees/info}">Information</a></li>
 					</ul>
 				</li>
-				<li><a th:href="@{/profile}">Profile</a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						Settings
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/settings}">Profile</a></li>
+						<li><a th:href="@{/settings/edit}">Edit Contact Info</a></li>
+						<li><a th:href="@{/settings/resetPassword}">Reset Password</a></li>
+					</ul>
+				</li>
 				
 				<!-- Used JavaScript to have the link perform a POST on a hidden form -->
 				<li>
@@ -48,7 +58,33 @@
 			</ul>
  		</div>
 	</nav>
-	This is the user profile!
+	
+	<div class="container">
+		<h3>My Profile</h3>
+		<hr>
+		<label>Username</label>
+		<p th:text=${me.username} />
+		<br>
+		<label>First Name</label>
+		<p th:text=${me.firstName} />
+		<br>
+		<label>Last Name</label>
+		<p th:text=${me.lastName} />
+		<br>
+		<label>Email</label>
+		<p th:text=${me.email} />
+		<br>
+		<label>Phone</label>
+		<p th:text=${me.phone} />
+		<br>
+		
+		<label th:if="${myRoles.size()} == 1">Position</label>
+		<label th:if="${myRoles.size()} > 1">Positions</label>
+		<div th:each="myRole : ${myRoles}">
+			<span th:text=${myRole}></span>
+		</div>
+		
+	</div>
 </body>
 
 </html>

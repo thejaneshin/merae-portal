@@ -11,4 +11,9 @@ public interface UserService {
 	
 	public List<User> findAllDesigners();
 	
+	public List<String> findAllRolesByUserId(int userId);
+	
+	public User findById(int userId);
+	
+	public void save(User user);
 }

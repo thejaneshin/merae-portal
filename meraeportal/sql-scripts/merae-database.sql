@@ -13,7 +13,7 @@ CREATE TABLE `user` (
   `username` varchar(50) NOT NULL,
   `password` char(68) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `phone` varchar(10) NOT NULL,
+  `phone` varchar(12) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (name)
 VALUES 
-('ROLE_DESIGNER'),('ROLE_ADMIN');
+('ROLE_ADMIN'),('ROLE_DESIGNER');
 
 --
 -- Table structure for table `user_role`
@@ -84,7 +84,7 @@ INSERT INTO `user_role` (user_id,role_id)
 VALUES 
 (1,1),
 (1,2),
-(2,1);
+(2,2);
 
 --
 -- Table structure for table `project`

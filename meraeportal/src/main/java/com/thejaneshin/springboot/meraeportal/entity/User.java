@@ -14,6 +14,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.thejaneshin.springboot.meraeportal.validation.ValidEmail;
+import com.thejaneshin.springboot.meraeportal.validation.ValidPhone;
 
 @Entity
 @Table(name="user")
@@ -23,21 +28,31 @@ public class User {
 	@Column(name="id")
 	private int id;
 	
+	@NotNull(message=" is required")
+	@Size(min=1, message=" is required")
 	@Column(name="username")
 	private String username;
 	
+	@NotNull(message=" is required")
+	@Size(min=1, message=" is required")
 	@Column(name="password")
 	private String password;
 	
+	@ValidEmail
 	@Column(name="email")
 	private String email;
 	
+	@ValidPhone
 	@Column(name="phone")
 	private String phone;
 	
+	@NotNull(message=" is required")
+	@Size(min=1, message=" is required")
 	@Column(name="first_name")
 	private String firstName;
 	
+	@NotNull(message=" is required")
+	@Size(min=1, message=" is required")
 	@Column(name="last_name")
 	private String lastName;
 	
