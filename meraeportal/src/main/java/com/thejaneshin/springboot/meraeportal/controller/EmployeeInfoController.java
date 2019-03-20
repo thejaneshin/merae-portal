@@ -101,6 +101,15 @@ public class EmployeeInfoController {
 		
 		if (theBindingResult.hasErrors())
 			return "employees/info/add";
+
+		// Ensures both first and last names are capitalized correctly
+		String correctFirst = theUser.getFirstName();
+		correctFirst = correctFirst.substring(0, 1).toUpperCase() + correctFirst.substring(1).toLowerCase();
+		theUser.setFirstName(correctFirst);
+		
+		String correctLast = theUser.getLastName();
+		correctLast = correctLast.substring(0, 1).toUpperCase() + correctLast.substring(1).toLowerCase();
+		theUser.setLastName(correctLast);
 		
 		// If adding a new user, generate random password and enable user account
 		// Display the user info and the new generated password
@@ -113,15 +122,6 @@ public class EmployeeInfoController {
 			redirAttrs.addFlashAttribute("newUser", theUser.getUsername());
 			redirAttrs.addFlashAttribute("newPass", randomPass);
 		}
-		
-		// Ensures both first and last names are capitalized correctly
-		String correctFirst = theUser.getFirstName();
-		correctFirst = correctFirst.substring(0, 1).toUpperCase() + correctFirst.substring(1).toLowerCase();
-		theUser.setFirstName(correctFirst);
-		
-		String correctLast = theUser.getLastName();
-		correctLast = correctLast.substring(0, 1).toUpperCase() + correctLast.substring(1).toLowerCase();
-		theUser.setLastName(correctLast);
 		
 		userService.save(theUser);
 		return "redirect:/employees/info";
