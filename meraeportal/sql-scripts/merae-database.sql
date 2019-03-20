@@ -31,8 +31,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (username,password,email,phone,first_name,last_name,enabled)
 VALUES
-('admin','$2a$04$EtyjEjPeneLdsjdtDDvacO8eoiAammHx4BvAeFNKT3WVWLWfEJtrG','adam@merae.com','1234567890','Adam','Min',1),
-('designer','$2a$04$Biv.pNdXLbi/9dSfEi2eI.hKx2abCrboqnIucTijLmDVr.jwgi41G','des@merae.com','9876543210','Des','Sign',1);
+('admin','$2a$10$QKYlOtxRkjx5KZb/8WDJMeCokhYjwyn1XFAXrLSnTDnENe15LfaEi','adam@merae.com','1234567890','Adam','Min',1),
+('designer','$2a$10$WVcx0cGpEIv/TOmlcSznqe0SxzQAYgpr9BFRg460wQPZPhyvUNUCa','des@merae.com','9876543210','Des','Sign',1);
 
 --
 -- Table structure for table `role`

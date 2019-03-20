@@ -38,16 +38,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.dataSource(dataSource).passwordEncoder(passwordEncoder());
 	}
 	
-	// Add in more antMatchers() as I go
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/").hasAnyRole("DESIGNER", "ADMIN")
 			.antMatchers("/submit/**").hasRole("DESIGNER")
 			.antMatchers("/updateStatus/**").hasRole("DESIGNER")
-			.antMatchers("/profile/**").hasAnyRole("DESIGNER", "ADMIN")
+			.antMatchers("/undoComplete/**").hasRole("DESIGNER")
 			.antMatchers("/employees/**").hasRole("ADMIN")
-			.antMatchers("/unassigned/**").hasRole("ADMIN")
+			.antMatchers("/profile/**").hasAnyRole("DESIGNER", "ADMIN")
 			.and()
 			.formLogin()
 				.loginPage("/login")

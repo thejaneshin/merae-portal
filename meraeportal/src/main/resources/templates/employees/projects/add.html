@@ -17,47 +17,11 @@
 	<!-- reference CSS file -->
 	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
 
-	<title>Add Project</title>
+	<title>Save Project</title>
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-static-top">
-		<div class="container-fluid">
-			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="120" height="30"/></a>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a th:href="@{/}">Home</a></li>
-				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Employees
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/employees/projects}">Projects</a></li>
-						<li><a th:href="@{/employees/info}">Information</a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Settings
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/settings}">Profile</a></li>
-						<li><a th:href="@{/settings/edit}">Edit Contact Info</a></li>
-						<li><a th:href="@{/settings/changePassword}">Change Password</a></li>
-					</ul>
-				</li>
-				
-				<!-- Used JavaScript to have the link perform a POST on a hidden form -->
-				<li>
-					<a href="javascript: document.logoutForm.submit()" role="menuitem">Logout</a>
-						<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
-      						<input hidden="true" type="submit" value="Sign Out"/>
-   						</form> 
-				</li>
-			</ul>
- 		</div>
-	</nav>
+	<nav th:replace="nav-fragment :: nav"></nav>
 	
 	<br><br>
 	<div class="container">
@@ -65,10 +29,10 @@
 		<hr>
 		<form action="#" th:action="@{/employees/projects/save}"
 						 th:object="${project}" method="POST">
+						 
 			<input type="hidden" th:field="*{id}" />
 			<input type="hidden" th:field="*{user}" />
 			<input type="hidden" th:field="*{assignedDate}" />
-			
 			
 			<div style="margin-bottom: 25px" class="input-group col-md-3">
 				<label>Company</label>
@@ -90,7 +54,6 @@
 				<input type="text" th:field="*{invoice}" class="form-control" placeholder="Invoice link">
 			</div>
 			
-			<!-- Change this to dropdown with all the options -->
 			<div style="margin-bottom: 25px" class="input-group col-md-3">
 				<label>Project Type</label>
 				<select class="form-control" th:field="*{type}">
@@ -141,7 +104,7 @@
 				</select>
 			</div>
 			
-			<!-- This is a check for unassigned projects -->
+			<!-- This is a check for unassigned projects, since new projects are automatically N/A -->
 			<input th:if="${project.user == null}" type="hidden" th:field="*{status}" />
 			
 			<!-- Need to add in error field for this -->
@@ -155,8 +118,7 @@
 			
 			<div class="form-group">
 				<button type="submit" class="btn btn-info">Save</button>
-			</div>
-			
+			</div>		
 			
 		</form>
 		

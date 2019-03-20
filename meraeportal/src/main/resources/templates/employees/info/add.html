@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+		 href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<!-- reference CSS file -->
+	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
+
+	<title>Save Employee</title>
+</head>
+
+<body>
+	<nav th:replace="nav-fragment :: nav"></nav>
+	
+	<div class="container">
+		<h3>Save Employee</h3>
+		<hr>
+		
+		<form action="#" th:action="@{/employees/info/save}"
+						 th:object="${user}" method="POST">
+						 
+			<input type="hidden" th:field="*{id}" />
+			<input type="hidden" th:field="*{password}" />
+			<input type="hidden" th:field="*{enabled}" />
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Username</label>
+				<span th:errors="*{username}" class="error"></span>
+				<span th:if="${isExist}" class="error"> Username already exists</span>
+				<input type="text" th:field="*{username}" class="form-control" placeholder="Username">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>First Name</label>
+				<span th:errors="*{firstName}" class="error"></span>
+				<input type="text" th:field="*{firstName}" class="form-control" placeholder="First Name">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Last Name</label>
+				<span th:errors="*{lastName}" class="error"></span>
+				<input type="text" th:field="*{lastName}" class="form-control" placeholder="Last Name">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Email</label>
+				<span th:errors="*{email}" class="error"></span>
+				<input type="text" th:field="*{email}" class="form-control" placeholder="Email">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Phone (xxx-xxx-xxxx)</label>
+				<span th:errors="*{phone}" class="error"></span>
+				<input type="text" th:field="*{phone}" class="form-control" placeholder="Phone">
+			</div>
+			
+			<div style="margin-bottom: 25px" class="input-group col-md-3">
+				<label>Role(s)</label>
+				<span th:if="${noRoles}" class="error"> Please pick at least one</span>
+				<select multiple="multiple" class="form-control" th:field="*{roles}">
+					<!-- Value stands for the role id's -->
+					<option th:value="1">Admin</option>
+					<option th:value="2">Designer</option>
+				</select>
+			</div>
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
+			<div class="form-group">
+				<button type="submit" class="btn btn-info">Save</button>
+			</div>			 
+		</form>
+		
+		<hr>
+		<a th:href="@{/employees/info}">Back to Employees Information</a>
+		<br><br>
+	</div>
+	<br><br>
+</body>
+
+</html>

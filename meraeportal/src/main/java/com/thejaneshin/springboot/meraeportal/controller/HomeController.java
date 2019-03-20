@@ -43,19 +43,21 @@ public class HomeController {
 	}
 	
 	@GetMapping("/updateStatus")
-	public String updateStatus(@RequestParam("projectId") int theId, Model theModel) {
+	public String updateStatus(@RequestParam("projectId") int projectId, Model theModel) {
 		// Makes sure a user doesn't try to update status of another person's project
 		User me = userService.getCurrentUser();
-		User projectUser = userService.findUserByProjectId(theId);
+		User projectUser = userService.findUserByProjectId(projectId);
 		
 		// If no user associated or different user is trying to access
 		if (projectUser == null || me.getId() != projectUser.getId())
 			return "access-denied";
 		else {
-			Project theProject = projectService.findById(theId);
-			// If project is already completed
-			if (theProject.getStatus().equals("Completed") && theProject.getSubmittedDate() != null)
+			Project theProject = projectService.findById(projectId);
+			// If project is already completed or cancelled
+			if (theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() != null ||
+					theProject.getStatus().equals("Cancelled") || theProject.getCancelledDate() != null)
 				return "access-denied";
+			
 			theModel.addAttribute("project", theProject);
 			return "home/update-status";
 		}
@@ -70,20 +72,18 @@ public class HomeController {
 	}
 	
 	@GetMapping("/submit")
-	public String submitMyProject(@RequestParam("projectId") int theId) {
-		// Makes sure a user doesn't try to submit another person's project
+	public String submitMyProject(@RequestParam("projectId") int projectId) {
 		User me = userService.getCurrentUser();
-		User projectUser = userService.findUserByProjectId(theId);
+		User projectUser = userService.findUserByProjectId(projectId);
 		
-		// If no user associated or different user is trying to access
 		if (projectUser == null || me.getId() != projectUser.getId())
 			return "access-denied";
 		else {
-			Project theProject = projectService.findById(theId);
-			// If project is already completed or cancelled
+			Project theProject = projectService.findById(projectId);
 			if (theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() != null ||
 					theProject.getStatus().equals("Cancelled") || theProject.getCancelledDate() != null)
 				return "access-denied";
+			
 			theProject.setStatus("Completed");
 			theProject.setSubmittedDate(LocalDate.now());
 			projectService.save(theProject);
@@ -92,17 +92,17 @@ public class HomeController {
 	}
 	
 	@GetMapping("/undoComplete")
-	public String undoCompleteMyProject(@RequestParam("projectId") int theId) {
+	public String undoCompleteMyProject(@RequestParam("projectId") int projectId) {
 		User me = userService.getCurrentUser();
-		User projectUser = userService.findUserByProjectId(theId);
-		
-		// If no user associated or different user is trying to access
+		User projectUser = userService.findUserByProjectId(projectId);
+
 		if (projectUser == null || me.getId() != projectUser.getId())
 			return "access-denied";
 		else {
-			Project theProject = projectService.findById(theId);
+			Project theProject = projectService.findById(projectId);
 			if (!theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() == null)
 				return "access-denied";
+			
 			theProject.setStatus("N/A");
 			theProject.setSubmittedDate(null);
 			projectService.save(theProject);

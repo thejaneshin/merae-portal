@@ -21,43 +21,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-static-top">
-		<div class="container-fluid">
-			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="120" height="30"/></a>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a th:href="@{/}">Home</a></li>
-				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Employees
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/employees/projects}">Projects</a></li>
-						<li><a th:href="@{/employees/info}">Information</a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Settings
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/settings}">Profile</a></li>
-						<li><a th:href="@{/settings/edit}">Edit Contact Info</a></li>
-						<li><a th:href="@{/settings/changePassword}">Change Password</a></li>
-					</ul>
-				</li>
-				
-				<!-- Used JavaScript to have the link perform a POST on a hidden form -->
-				<li>
-					<a href="javascript: document.logoutForm.submit()" role="menuitem">Logout</a>
-						<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
-      						<input hidden="true" type="submit" value="Sign Out"/>
-   						</form> 
-				</li>
-			</ul>
- 		</div>
-	</nav>
+	<nav th:replace="nav-fragment :: nav"></nav>
 	<br><br>
 	
 	<div class="container">
@@ -86,13 +50,17 @@
 			<tbody>
 				<tr th:each="un : ${unassigned}">
 					<td th:text="${un.company}" />
+					
 					<td th:if=${un.paid}>Yes</td>
 					<td th:if=${!un.paid}>No</td>
+					
 					<td><a th:href="${un.invoice}" target="_blank">Link</a></td>
 					<td th:text="${un.type}" />
 					<td th:text="${un.description}" />
+					
 					<td th:if=${un.print}>Yes</td>
 					<td th:if=${!un.print}>No</td>
+					
 					<td th:text="${#temporals.format(un.dueDate, 'MM/dd/yyyy')}" />
 					<td>
 						<a th:href="@{/employees/projects/update(projectId=${un.id})}">
@@ -143,14 +111,18 @@
 			<tbody>
 				<tr th:each="val : ${incEach.value}">
 					<td th:text="${val.company}" />
+					
 					<td th:if=${val.paid}>Yes</td>
 					<td th:if=${!val.paid}>No</td>
+					
 					<td><a th:href="${val.invoice}" target="_blank">Link</a></td>
 					<td th:text="${#temporals.format(val.assignedDate, 'MM/dd/yyyy')}" />
 					<td th:text="${val.type}" />
 					<td th:text="${val.description}" />
+					
 					<td th:if=${val.print}>Yes</td>
 					<td th:if=${!val.print}>No</td>
+					
 					<td th:text="${val.status}" />
 					<td th:text="${#temporals.format(val.dueDate, 'MM/dd/yyyy')}" />
 					<td>
@@ -192,8 +164,10 @@
 			<tbody>
 				<tr th:each="comp : ${completed}">
 					<td th:text="${comp.company}" />
+					
 					<td th:if=${comp.paid}>Yes</td>
 					<td th:if=${!comp.paid}>No</td>
+					
 					<td><a th:href="${comp.invoice}" target="_blank">Link</a></td>
 					<td th:text="${comp.type}" />
 					<td th:text="${#temporals.format(comp.submittedDate, 'MM/dd/yyyy')}" />
@@ -202,7 +176,7 @@
 						<a th:href="@{/employees/projects/undoComplete(projectId=${comp.id})}"
 						   class="btn btn-primary btn-sm"
 						   onclick="if (!(confirm('Are you sure you want to undo complete?'))) return false">
-							Undo Complete
+							Undo
 						</a>
 					</td>
 				</tr>
@@ -211,6 +185,7 @@
 		<p th:unless="${completed} and ${completed.size()}">No projects completed.</p>
 	</div>
 	<br><br>
+	
 	<div class="container">
 		<h4><b>Cancelled Projects</b></h4>
 		<hr>
@@ -223,14 +198,16 @@
 					<th>Project</th>
 					<th>Worked By</th>
 					<th>Cancelled On</th>
-					<th>Undo Cancel</th>
+					<th>Undo Cancel?</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="canc : ${cancelled}">
 					<td th:text="${canc.company}" />
+					
 					<td th:if=${canc.paid}>Yes</td>
 					<td th:if=${!canc.paid}>No</td>
+					
 					<td><a th:href="${canc.invoice}" target="_blank">Link</a></td>
 					<td th:text="${canc.type}" />
 					<td th:text="${canc.user.firstName + ' ' + canc.user.lastName}" />
@@ -239,7 +216,7 @@
 						<a th:href="@{/employees/projects/undoCancel(projectId=${canc.id})}"
 						   class="btn btn-primary btn-sm"
 						   onclick="if (!(confirm('Are you sure you want to undo cancel?'))) return false">
-							Undo Cancel
+							Undo
 						</a>
 					</td>
 				</tr>

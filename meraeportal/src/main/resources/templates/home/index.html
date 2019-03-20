@@ -21,43 +21,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse navbar-static-top">
-		<div class="container-fluid">
-			<a class="nav-logo" th:href="@{/}"><img th:src="@{/images/nav-merae-logo.png}" width="120" height="30"/></a>
-			<ul class="nav navbar-nav navbar-right">
-				<li><a th:href="@{/}">Home</a></li>
-				<li sec:authorize="hasAuthority('ROLE_ADMIN')" class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Employees
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/employees/projects}">Projects</a></li>
-						<li><a th:href="@{/employees/info}">Information</a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						Settings
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a th:href="@{/settings}">Profile</a></li>
-						<li><a th:href="@{/settings/edit}">Edit Contact Info</a></li>
-						<li><a th:href="@{/settings/changePassword}">Change Password</a></li>
-					</ul>
-				</li>
-				
-				<!-- Used JavaScript to have the link perform a POST on a hidden form -->
-				<li>
-					<a href="javascript: document.logoutForm.submit()" role="menuitem">Logout</a>
-						<form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true">
-      						<input hidden="true" type="submit" value="Sign Out"/>
-   						</form> 
-				</li>
-			</ul>
- 		</div>
-	</nav>
+	<nav th:replace="nav-fragment :: nav"></nav>
 	
 	<p class="welcome" align="right" th:text="${'Welcome back, ' + me.firstName + '!'}" />
 	
@@ -65,6 +29,8 @@
 	<div class="container">
 		<h4><b>My Assigned Projects</b></h4>
 		<hr>
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+		
 		<table th:if="${myIncompleteProjects} and ${myIncompleteProjects.size()}" class="table table-bordered table-striped">
 			<thead class="thead-dark">
 				<tr>
@@ -83,14 +49,18 @@
 			<tbody>
 				<tr th:each="myIncomplete : ${myIncompleteProjects}">
 					<td th:text="${myIncomplete.company}" />
+					
 					<td th:if=${myIncomplete.paid}>Yes</td>
 					<td th:if=${!myIncomplete.paid}>No</td>
+					
 					<td><a th:href="${myIncomplete.invoice}" target="_blank">Link</a></td>
 					<td th:text="${#temporals.format(myIncomplete.assignedDate, 'MM/dd/yyyy')}" />
 					<td th:text="${myIncomplete.type}" />
 					<td th:text="${myIncomplete.description}" />
+					
 					<td th:if=${myIncomplete.print}>Yes</td>
 					<td th:if=${!myIncomplete.print}>No</td>
+					
 					<td><a th:href="@{/updateStatus(projectId=${myIncomplete.id})}" th:text="${myIncomplete.status}"></a></td>
 					<td th:text="${#temporals.format(myIncomplete.dueDate, 'MM/dd/yyyy')}" />
 					<td>
@@ -106,6 +76,7 @@
 		<p th:unless="${myIncompleteProjects} and ${myIncompleteProjects.size()}">No projects at the moment.</p>
 	</div>
 	<br>
+	
 	<div class="container">
 		<h4><b>My Completed Projects</b></h4>
 		<hr>
@@ -123,8 +94,10 @@
 			<tbody>
 				<tr th:each="myCompleted : ${myCompletedProjects}">
 					<td th:text="${myCompleted.company}" />
+					
 					<td th:if=${myCompleted.paid}>Yes</td>
 					<td th:if=${!myCompleted.paid}>No</td>
+					
 					<td><a th:href="${myCompleted.invoice}" target="_blank">Link</a></td>
 					<td th:text="${myCompleted.type}" />
 					<td th:text="${#temporals.format(myCompleted.submittedDate, 'MM/dd/yyyy')}" />
@@ -132,7 +105,7 @@
 						<a th:href="@{/undoComplete(projectId=${myCompleted.id})}"
 						   class="btn btn-primary btn-sm"
 						   onclick="if (!(confirm('Are you sure you want to undo complete?'))) return false">
-							Undo Complete
+							Undo
 						</a>
 					</td>
 				</tr>
@@ -158,8 +131,10 @@
 			<tbody>
 				<tr th:each="myCancelled : ${myCancelledProjects}">
 					<td th:text="${myCancelled.company}" />
+					
 					<td th:if=${myCancelled.paid}>Yes</td>
 					<td th:if=${!myCancelled.paid}>No</td>
+					
 					<td><a th:href="${myCancelled.invoice}" target="_blank">Link</a></td>
 					<td th:text="${myCancelled.type}" />
 					<td th:text="${#temporals.format(myCancelled.cancelledDate, 'MM/dd/yyyy')}" />
@@ -168,7 +143,7 @@
 		</table>
 		<p th:unless="${myCancelledProjects} and ${myCancelledProjects.size()}">No projects cancelled.</p>
 	</div>
-	
+	<br><br>
 	
 </body>
 

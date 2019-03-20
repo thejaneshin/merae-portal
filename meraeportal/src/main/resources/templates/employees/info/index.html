@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+	
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+		 href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<!-- reference CSS file -->
+	<link rel="stylesheet" th:href="@{/css/custom.css}"/>
+
+	<title>Employees Information</title>
+</head>
+
+<body>
+	<nav th:replace="nav-fragment :: nav"></nav>
+	<br><br>
+	
+	<div class="container">
+		<h3>
+			<b>Employees</b>
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+			
+			<a th:href="@{/employees/info/add}" class="btn btn-primary btn-md mb-3 pull-right">
+				Add Employee
+			</a>
+		</h3>
+		<hr>
+		<div class="form-group" th:if="${showNewPass}">
+			<div class="col-xs-15">
+				<div>
+					<div class="alert alert-success col-md-3">
+						<b>Added new employee!</b>
+						<p th:text="${'Name: ' + newName}" />
+						<p th:text="${'Username: ' + newUser}" />
+						<p th:text="${'Password: ' + newPass}" />
+					</div>
+				</div>
+			</div>
+			<br><br><br>
+		</div>
+		<div class="form-group" th:if="${resetPass}">
+			<div class="col-xs-15">
+				<div>
+					<div class="alert alert-success col-md-3">
+						<b>Reset password for employee</b>
+						<p th:text="${'Name: ' + name}" />
+						<p th:text="${'Username: ' + user}" />
+						<p th:text="${'Password: ' + pass}" />
+					</div>
+				</div>
+			</div>
+			<br><br><br>
+		</div>
+	</div>
+	
+	<div class="container">
+		<h4><b>Admins</b></h4>
+		<hr>
+		<table th:if="${admins} and ${admins.size()}" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Positions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="admin : ${admins}">
+					<td th:text="${admin.firstName} + ' ' + ${admin.lastName}" />
+					<td th:text=${admin.username} />
+					<td><a th:href="@{'mailto:' + ${admin.email}}" th:text="${admin.email}"></a></td>
+					<td th:text=${admin.phone} />
+					<td>
+						<span th:if="${admin.getRoles().size()} == 2">Admin, Designer</span>
+						<span th:if="${admin.getRoles().size()} == 1">Admin</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p th:unless="${admins} and ${admins.size()}">No admins at the moment.</p>
+	</div>
+	<br><br>
+	<div class="container">
+		<h4><b>Designers</b></h4>
+		<hr>
+		<table th:if="${justDesigners} and ${justDesigners.size()}" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Name</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="justDes : ${justDesigners}">
+					<td th:text="${justDes.firstName} + ' ' + ${justDes.lastName}" />
+					<td th:text=${justDes.username} />
+					<td><a th:href="@{'mailto:' + ${justDes.email}}" th:text="${justDes.email}"></a></td>
+					<td th:text=${justDes.phone} />
+					<td>
+						<a th:href="@{/employees/info/update(userId=${justDes.id})}">
+							Update Employee
+						</a>
+						|
+						<a th:href="@{/employees/info/resetPassword(userId=${justDes.id})}">
+							Reset Password
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p th:unless="${justDesigners} and ${justDesigners.size()}">No designers at the moment.</p>
+	</div>
+	<br><br>
+</body>
+
+</html>

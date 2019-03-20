@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.thejaneshin.springboot.meraeportal.dao.UserRepository;
@@ -16,12 +15,12 @@ import com.thejaneshin.springboot.meraeportal.entity.User;
 @Service
 public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private RoleService roleService;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository theUserRepository, BCryptPasswordEncoder theBCrypt) {
+	public UserServiceImpl(UserRepository theUserRepository, RoleService theRoleService) {
 		userRepository = theUserRepository;
-		bCryptPasswordEncoder = theBCrypt;
+		roleService = theRoleService;
 	}
 	
 	@Override
@@ -49,38 +48,54 @@ public class UserServiceImpl implements UserService {
 				if (r.getName().equals("ROLE_DESIGNER"))
 					designers.add(u);
 			}
-		}
-		
+		}	
 		return designers;
 	}
-
+	
 	@Override
-	public List<String> findAllRolesByUserId(int userId) {
-		User user = userRepository.findById(userId);
-		List<String> roles = new LinkedList<>();
-		for (Role r : user.getRoles())
-			roles.add(r.getName());
+	public List<User> findAllAdminsOrdered() {
+		List<User> sortedAdmins = new LinkedList<>();
 		
-		// List of role names sorted by order of hierarchy
-		List<String> orderedRoles = new LinkedList<>();
-		
-		if (roles.contains("ROLE_ADMIN"))
-			orderedRoles.add("Admin");
-		if (roles.contains("ROLE_DESIGNER"))
-			orderedRoles.add("Designer");
-		
-		return orderedRoles;
+		for (User u : userRepository.findAllByNameOrder()) {
+			List<String> userRoles = roleService.findAllRolesByUserId(u.getId());
+			
+			if (userRoles.contains("Admin"))
+				sortedAdmins.add(u);
+		}
+		return sortedAdmins;
 	}
-
+	
+	@Override
+	public List<User> findAllJustDesignersOrdered() {
+		List<User> sortedDesigners = new LinkedList<>();
+		
+		for (User u : userRepository.findAllByNameOrder()) {
+			List<String> userRoles = roleService.findAllRolesByUserId(u.getId());
+			
+			if (userRoles.contains("Designer") && !userRoles.contains("Admin"))
+				sortedDesigners.add(u);
+		}
+		return sortedDesigners;
+	}
+	
 	@Override
 	public User findById(int userId) {
 		return userRepository.findById(userId);
 	}
 	
 	@Override
-	public void save(User user) {
-		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		userRepository.save(user);
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username);
 	}
 
+	@Override
+	public List<String> findAllUsernames() {
+		return userRepository.findAllUsernames();
+	}
+	
+	@Override
+	public void save(User user) {
+		userRepository.save(user);
+	}
+	
 }

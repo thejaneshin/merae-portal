@@ -33,8 +33,6 @@ public class User {
 	@Column(name="username")
 	private String username;
 	
-	@NotNull(message=" is required")
-	@Size(min=1, message=" is required")
 	@Column(name="password")
 	private String password;
 	
@@ -55,6 +53,9 @@ public class User {
 	@Size(min=1, message=" is required")
 	@Column(name="last_name")
 	private String lastName;
+	
+	@Column(name="enabled")
+	private int enabled;
 	
 	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinTable(name="user_role", 
@@ -147,6 +148,14 @@ public class User {
 		this.lastName = lastName;
 	}
 
+	public int getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(int enabled) {
+		this.enabled = enabled;
+	}
+
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -159,14 +168,15 @@ public class User {
 		return projects;
 	}
 
-	public void setCustomers(Set<Project> projects) {
+	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phone="
-				+ phone + ", firstName=" + firstName + ", lastName=" + lastName + ", roles=" + roles + "]";
+				+ phone + ", firstName=" + firstName + ", lastName=" + lastName + ", enabled=" + enabled + ", roles="
+				+ roles + "]";
 	}
 	
 }

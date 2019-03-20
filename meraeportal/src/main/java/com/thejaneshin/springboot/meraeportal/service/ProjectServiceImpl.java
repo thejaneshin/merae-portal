@@ -37,6 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<Project> findAllCancelledByUserId(int userId) {
 		return projectRepository.findByUserCancelled(userId);
 	}
+	
 	@Override
 	public List<Project> findAllUnassigned() {
 		return projectRepository.findByUserIsNullOrderByIdDesc();
@@ -44,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Override
 	public Map<User, List<Project>> findAllIncompleteProjectsByEachDesigner() {
-		// Use LinkedHashMap to keep the order
+		// Use LinkedHashMap to preserve name order
 		Map<User, List<Project>> res = new LinkedHashMap<>();
 		
 		List<User> designers = userService.findAllDesigners();

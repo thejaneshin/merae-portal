@@ -66,8 +66,8 @@ public class EmployeeProjectController {
 	}
 
 	@GetMapping("/update")
-	public String updateProject(@RequestParam("projectId") int theId, Model theModel) {
-		Project theProject = projectService.findById(theId);
+	public String updateProject(@RequestParam("projectId") int projectId, Model theModel) {
+		Project theProject = projectService.findById(projectId);
 		if (theProject == null || theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() != null ||
 				theProject.getStatus().equals("Cancelled") || theProject.getCancelledDate() != null)
 			return "access-denied";
@@ -89,18 +89,18 @@ public class EmployeeProjectController {
 	}
 	
 	@GetMapping("/delete")
-	public String deleteProject(@RequestParam("projectId") int theId) {
-		Project theProject = projectService.findById(theId);
+	public String deleteProject(@RequestParam("projectId") int projectId) {
+		Project theProject = projectService.findById(projectId);
 		if (theProject == null || theProject.getUser() != null || theProject.getAssignedDate() != null)
 			return "access-denied";
 		
-		projectService.deleteById(theId);
+		projectService.deleteById(projectId);
 		return "redirect:/employees/projects";
 	}
 	
 	@GetMapping("/assign")
-	public String assignProject(@RequestParam("projectId") int theId, Model theModel) {
-		Project theProject = projectService.findById(theId);
+	public String assignProject(@RequestParam("projectId") int projectId, Model theModel) {
+		Project theProject = projectService.findById(projectId);
 		if (theProject == null || theProject.getUser() != null || theProject.getAssignedDate() != null)
 			return "access-denied";
 		else {
@@ -116,16 +116,16 @@ public class EmployeeProjectController {
 	@PostMapping("/assign")
 	public String assignProject(@ModelAttribute("project") Project theProject, @RequestParam("projectId") int projectId) {
 		Project p = projectService.findById(projectId);
-		theProject.setAssignedDate(LocalDate.now());
+
 		p.setUser(theProject.getUser());
-		p.setAssignedDate(theProject.getAssignedDate());
+		p.setAssignedDate(LocalDate.now());
 		projectService.save(p);
 		return "redirect:/employees/projects";
 	}
 	
 	@GetMapping("/submit")
-	public String submitProject(@RequestParam("projectId") int theId) {
-		Project theProject = projectService.findById(theId);
+	public String submitProject(@RequestParam("projectId") int projectId) {
+		Project theProject = projectService.findById(projectId);
 		
 		if (theProject == null || theProject.getUser() == null || theProject.getAssignedDate() == null ||
 				theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() != null || 
@@ -139,8 +139,8 @@ public class EmployeeProjectController {
 	}
 	
 	@GetMapping("/undoComplete")
-	public String undoCompleteProject(@RequestParam("projectId") int theId) {
-		Project theProject = projectService.findById(theId);
+	public String undoCompleteProject(@RequestParam("projectId") int projectId) {
+		Project theProject = projectService.findById(projectId);
 		
 		if (theProject == null || !theProject.getStatus().equals("Completed") || theProject.getSubmittedDate() == null)
 			return "access-denied";

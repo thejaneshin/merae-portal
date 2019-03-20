@@ -85,8 +85,10 @@ public class Project {
 		this.status = "N/A";
 	}
 
-	public Project(String company, boolean paid, String invoice, LocalDate assignedDate, String type,
-			String description, boolean print, String status, LocalDate dueDate, User user) {
+	public Project(int id, String company, boolean paid, String invoice, LocalDate assignedDate, String type,
+			String description, boolean print, String status, LocalDate dueDate, LocalDate submittedDate,
+			LocalDate cancelledDate, User user) {
+		this.id = id;
 		this.company = company;
 		this.paid = paid;
 		this.invoice = invoice;
@@ -96,6 +98,8 @@ public class Project {
 		this.print = print;
 		this.status = status;
 		this.dueDate = dueDate;
+		this.submittedDate = submittedDate;
+		this.cancelledDate = cancelledDate;
 		this.user = user;
 	}
 
@@ -207,8 +211,8 @@ public class Project {
 	public String toString() {
 		return "Project [id=" + id + ", company=" + company + ", paid=" + paid + ", invoice=" + invoice
 				+ ", assignedDate=" + assignedDate + ", type=" + type + ", description=" + description + ", print="
-				+ print + ", status=" + status + ", dueDate=" + dueDate + ", submittedDate=" + submittedDate + ", cancelledDate="
-				+ cancelledDate + "]";
+				+ print + ", status=" + status + ", dueDate=" + dueDate + ", submittedDate=" + submittedDate
+				+ ", cancelledDate=" + cancelledDate + ", user=" + user + "]";
 	}
 
 }

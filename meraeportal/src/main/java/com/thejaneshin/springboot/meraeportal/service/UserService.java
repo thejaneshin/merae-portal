@@ -11,9 +11,15 @@ public interface UserService {
 	
 	public List<User> findAllDesigners();
 	
-	public List<String> findAllRolesByUserId(int userId);
+	public List<User> findAllAdminsOrdered();
+	
+	public List<User> findAllJustDesignersOrdered();
 	
 	public User findById(int userId);
+	
+	public User findByUsername(String username);
+	
+	public List<String> findAllUsernames();
 	
 	public void save(User user);
 }
